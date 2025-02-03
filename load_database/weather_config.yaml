@@ -1,0 +1,37 @@
+mongo_uri: "mongodb://localhost:27017/"
+database: "mongo_db_project"
+collection: "weather_collection"
+
+file_paths:
+  - ["noaa_weather/2017/may/noaa_weather_may2017_v2.shp",
+     "noaa_weather/2017/jun/noaa_weather_jun2017_v2.shp"]
+  - ["noaa_weather/2017/jul/noaa_weather_jul2017_v2.shp",
+     "noaa_weather/2017/aug/noaa_weather_aug2017_v2.shp",
+     "noaa_weather/2017/sep/noaa_weather_sep2017_v2.shp"]
+  - ["noaa_weather/2017/oct/noaa_weather_oct2017_v2.shp",
+     "noaa_weather/2017/nov/noaa_weather_nov2017_v2.shp",
+     "noaa_weather/2017/dec/noaa_weather_dec2017_v2.shp"]
+  - ["noaa_weather/2018/jan/noaa_weather_jan2018_v2.shp",
+     "noaa_weather/2018/feb/noaa_weather_feb2018_v2.shp",
+     "noaa_weather/2018/mar/noaa_weather_mar2018_v2.shp"]
+  - ["noaa_weather/2018/apr/noaa_weather_apr2018_v2.shp",
+     "noaa_weather/2018/may/noaa_weather_may2018_v2.shp",
+     "noaa_weather/2018/jun/noaa_weather_jun2018_v2.shp"]
+  - ["noaa_weather/2018/jul/noaa_weather_jul2018_v2.shp",
+     "noaa_weather/2018/aug/noaa_weather_aug2018_v2.shp",
+     "noaa_weather/2018/sep/noaa_weather_sep2018_v2.shp"]
+  - ["noaa_weather/2018/oct/noaa_weather_oct2018_v2.shp",
+     "noaa_weather/2018/nov/noaa_weather_nov2018_v2.shp",
+     "noaa_weather/2018/dec/noaa_weather_dec2018_v2.shp"]
+  - ["noaa_weather/2019/jan/noaa_weather_jan2019_v2.shp",
+     "noaa_weather/2019/feb/noaa_weather_feb2019_v2.shp",
+     "noaa_weather/2019/mar/noaa_weather_mar2019_v2.shp"]
+  - ["noaa_weather/2019/apr/noaa_weather_apr2019_v2.shp",
+     "noaa_weather/2019/may/noaa_weather_may2019_v2.shp",
+     "noaa_weather/2019/jun/noaa_weather_jun2019_v2.shp"]
+  - ["noaa_weather/2019/jul/noaa_weather_jul2019_v2.shp",
+     "noaa_weather/2019/aug/noaa_weather_aug2019_v2.shp",
+     "noaa_weather/2019/sep/noaa_weather_sep2019_v2.shp"]
+  - ["noaa_weather/2019/oct/noaa_weather_oct2019_v2.shp",
+     "noaa_weather/2019/nov/noaa_weather_nov2019_v2.shp",
+     "noaa_weather/2019/dec/noaa_weather_dec2019_v2.shp"]
