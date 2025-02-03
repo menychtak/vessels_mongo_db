@@ -55,7 +55,7 @@ def main():
     start = time.time()
 
     # Load config from YAML file
-    config = load_config("geo.yaml")
+    config = load_config("geo_config.yaml")
 
     # Connect to MongoDB
     client = MongoClient(config["mongo_uri"])

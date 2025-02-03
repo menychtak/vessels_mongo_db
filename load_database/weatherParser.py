@@ -110,7 +110,7 @@ def main():
     start = time.time()
     
     # Load config from YAML file
-    config = load_config("weather.yaml")
+    config = load_config("weather_config.yaml")
 
     # Define the file paths
     file_paths = define_file_paths(config)
