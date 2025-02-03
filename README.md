@@ -1,4 +1,5 @@
 ## Project Overview
+This project was developed as part of an assignment for the University of Piraeus, Department of Digital Systems, M.Sc. in “Information Systems and Services,” and is **co-authored by Panis Konstantinos**.
 This project focuses on designing and implementing a NoSQL database using **MongoDB** to manage a comprehensive dataset related to ships. The goal is to create an optimized data model that ensures efficient **storage, indexing, and partitioning**, allowing for seamless query execution while maintaining high performance and scalability.
 
 ## Prerequisites
