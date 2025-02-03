@@ -1,0 +1,6 @@
+mongo_uri: "mongodb://localhost:27017/"
+database: "vessel_database"
+collection: "vessels_collection"
+
+vessel_data_path: "unipi_ais_static.csv"
+type_codes_path: "ais_codes_descriptions.csv"
