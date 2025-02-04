@@ -74,8 +74,8 @@ def query2_vessels_by_country(db):
     εύρεση των πλοίων με σημαία Ελλάδας και όνομα που περιέχει κάποιο αλφαριθμητικό
     """
     print("Input the variables for query 'Find vessels from a specific country that contain a given alphanumeric in their ship type description'")
-    country = input("Give the country name to check for: ex. Malta")
-    alphanumeric = input("Give alphanumeric you want to check for in description: ex. all")
+    country = input("Give the country name to check for ex. Malta:")
+    alphanumeric = input("Give alphanumeric you want to check for in description ex. all:")
     collection = db.vessels_collection
     # Aggregate pipeline definition
     pipeline = [{"$match": {"country": country}}, # Match the country flag
@@ -102,9 +102,9 @@ def query3a_find_vessels_in_radius(db):
     collection = db.dynamic_collection
     
     print("Input the variables for query 'Find vessels within the circle of given point and radius")
-    lon = float(input("Insert longitude of center point: ex. 23.3699798"))
-    lat = float(input("Insert latitude of center point: ex. 37.6972956"))
-    radius = float(input("Insert radius of circle (km): ex. 1"))
+    lon = float(input("Insert longitude of center point ex. 23.3699798:"))
+    lat = float(input("Insert latitude of center point ex. 37.6972956:"))
+    radius = float(input("Insert radius of circle (km) ex. 1:"))
     # Pipeline definition
     pipeline = [{"$match": {"positions.geometry": 
                                 {"$geoWithin": 
@@ -488,18 +488,27 @@ def main():
     ensure_geospatial_index(db)
 
     # queries
+    print("\n\n\nRunnin query vessels_by_country")
     query2_vessels_by_country(db)
+    print("\n\n\nRunnin query find_vessels_in_radius")
     query3a_find_vessels_in_radius(db)
+    print("\n\n\nRunnin query K_closest_vessels_to_point")
     query3b_K_closest_vessels_to_point(db)
+
+    print("\n\n\nRunnin query find_islands_with_vessels")
     islands_with_vessels = find_islands_with_vessels(db)
     fid = islands_with_vessels[0]
 
+    print("\n\n\nRunnin query find_vessels_near_island")
     query3c_vessels_near_island(db, fid)
+
+    print("\n\n\nRunnin query find_closest_vessels_per_island")
     closest_vessels = find_closest_vessels_per_island(db)
     print("Closest vessels per island:")
     for vessel_info in closest_vessels:
         print(vessel_info)
 
+    print("\n\n\nRunnin query vessel_proximity_in_time_range")
     documents = query4_vessel_proximity_in_time_range(db)
     print(documents)
     client.close()
