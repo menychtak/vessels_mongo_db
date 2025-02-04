@@ -485,6 +485,7 @@ def query4_vessel_proximity_in_time_range(db):
 
 def main():
     db, client = mongo_connect()
+    
     ensure_geospatial_index(db)
 
     # queries
