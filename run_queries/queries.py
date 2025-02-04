@@ -7,6 +7,7 @@ from bson import json_util
 import random
 from datetime import datetime
 from geopy.distance import geodesic
+from collections import defaultdict
 
 
 def mongo_connect():
