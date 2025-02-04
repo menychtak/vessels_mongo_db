@@ -69,18 +69,16 @@ def ensure_geospatial_index(db):
         print(f"Error creating geospatial index: {e}")
 
 
-def query2_vessels_by_country(db):
+def query2_vessels_by_country(db, country="Malta", alphanumeric="all"):
     """
-    εύρεση των πλοίων με σημαία Ελλάδας και όνομα που περιέχει κάποιο αλφαριθμητικό
+    Vessels with specific country flag containing a given alphanumeric on ship type description
     """
-    print("Input the variables for query 'Find vessels from a specific country that contain a given alphanumeric in their ship type description'")
-    country = input("Give the country name to check for ex. Malta:")
-    alphanumeric = input("Give alphanumeric you want to check for in description ex. all:")
+    print("Executing query 2...")
     collection = db.vessels_collection
     # Aggregate pipeline definition
     pipeline = [{"$match": {"country": country}}, # Match the country flag
                 {"$match": {"description":
-                                {"$regex": str(".*"+ alphanumeric + ".*"), "$options": "i"}  # Match descriptions contain (.*__ .*) "all" (case-insensitive)
+                                {"$regex": str(".*"+ alphanumeric + ".*"), "$options": "i"}  # Match descriptions contain (.*__ .*) alphanumeric (case-insensitive)
                                 }
                     }
                 ]
@@ -89,30 +87,30 @@ def query2_vessels_by_country(db):
     start = time.time()
     # Fetch all aggregation results
     cursor = collection.aggregate(pipeline)
-    documents_output(cursor)
     # End timer
     end = time.time()
 
+    # Output the documents
+    documents_output(cursor)
     print(f"Execution time: {end - start:.4f} seconds")
 
-def query3a_find_vessels_in_radius(db):
+def query3a_find_vessels_in_radius(db, point=[23.5057984, 37.7658737], radius=5):
     """
-    εύρεση των πλοίων εντός κύκλου με δοθέν κέντρο και ακτίνα X
+    Find vessels in radius from given point
     """
+    print("Executing query 3a...")
     collection = db.dynamic_collection
     
-    print("Input the variables for query 'Find vessels within the circle of given point and radius")
-    lon = float(input("Insert longitude of center point ex. 23.3699798:"))
-    lat = float(input("Insert latitude of center point ex. 37.6972956:"))
-    radius = float(input("Insert radius of circle (km) ex. 1:"))
     # Pipeline definition
     pipeline = [{"$match": {"positions.geometry": 
                                 {"$geoWithin": 
-                                        {"$centerSphere": [ [ lon, lat], radius/6378.1 ] # Center of circle and radius definition
+                                        {"$centerSphere": [ point, radius/6378.1 ] # Center of circle and radius(km) definition
                                         }
                                 }
                             }
-                }] # Maybe check {"$project" : {"vessel_id": 1, "positions.geometry.coordinates": 1}
+                },
+                {"$project" : {"vessel_id": 1, "positions.geometry.coordinates": 1}}
+                ] 
     
     # Fetch results and calculate execution time
     start = time.time()
@@ -129,23 +127,20 @@ def query3b_K_closest_vessels_to_point(db, K=10, point=[23.3699798, 37.6972956])
     """
     K closest vessels to a given point
     """
+    print("Executing query 3b...")
     collection = db.dynamic_collection
-    
-    #collection.create_index([("vessel_id", ASCENDING)])
-    #collection.create_index([("positions.geometry", GEOSPHERE)]) # 2dsphere index creation on "geometry" key
-    #collection.create_index([("positions.geometry", GEOSPHERE), ("vessel_id", ASCENDING)])
 
     # Pipeline definition
     pipeline = [{"$geoNear":
                     {
-                        "near": {"type": "Point", "coordinates": point}, # Point to calculate distance
-                        "distanceField": "distance.calculated", # Show the calculated distance on document "distance"
-                        "includeLocs": "distance.location", # Show the point that is near to "near" point
-                        "spherical": "True" # Use spherical geometry
+                        "near": {"type": "Point", "coordinates": point},    # Point to calculate distance
+                        "distanceField": "distance.calculated",             # Show the calculated distance on document "distance"
+                        "includeLocs": "distance.location",                 # Show the point that is near to "near" point
+                        "spherical": "True"                                 # Use spherical geometry
                     }
                 },
                     {"$limit": K},
-                    {"$project": {"vessel_id": 1, "distance": 1}} # Get the K closest points only
+                    {"$project": {"vessel_id": 1, "distance": 1}}           # Get the K closest points only
                 ]
     
     # Fetch all aggregation results. + Execution time calculation
@@ -153,13 +148,11 @@ def query3b_K_closest_vessels_to_point(db, K=10, point=[23.3699798, 37.6972956])
     cursor = collection.aggregate(pipeline)
     end = time.time()
 
-    # Print the results
-    #for doc in cursor:
-    #    print(json_util.dumps(doc, indent=4))
+    # Documents output
+    documents_output(cursor)
 
     # Execution time
     print(f"Execution time: {end - start:.4f} seconds")
-    #explain_query(collection, pipeline)'''
 
 def find_islands_with_vessels(db, radius=1000, start_time=None, end_time=None):
     """
@@ -254,6 +247,7 @@ def query3c_vessels_near_island(db, fid=1, radius=1000, start_time=None, end_tim
     Find vessels within a specified radius from the centroid of an island
     and return their exact distance from the centroid.
     """
+    print("Preparing execution of query3c...")
     island_collection = db.geodata_collection
     vessel_collection = db.dynamic_collection
 
@@ -286,7 +280,7 @@ def query3c_vessels_near_island(db, fid=1, radius=1000, start_time=None, end_tim
         "$geoNear": {
             "near": {"type": "Point", "coordinates": centroid_coords},
             "distanceField": "distance.calculated",
-            "maxDistance": radius,
+            "maxDistance": radius,      # In meters
             "spherical": True
         }
     }
@@ -309,7 +303,7 @@ def query3c_vessels_near_island(db, fid=1, radius=1000, start_time=None, end_tim
     end = time.time()
 
     results = list(cursor)
-    print(f"Query executed in {end - start:.2f} seconds. Found {len(results)} vessels.")
+    print(f"Query executed in {end - start:.2f} seconds. Found {len(results)} vessel(s).")
 
     # Display vessel distances
     vessel_distances = []
@@ -420,72 +414,82 @@ def find_closest_vessels_per_island(db, max_vessels=1, radius_step=1000, max_rad
 
     return closest_vessels
 
-def query4_vessel_proximity_in_time_range(db):
+def query4_vessel_proximity_in_time_range(db, X=4000, start_time="2017-11-06T08:00:00.000+00:00", end_time="2017-11-06T08:59:59.000+00:00"):
     """
-    εύρεση των πλοίων που πλησίασαν μεταξύ τους σε απόσταση Χ εντός χρονικού διαστήματος Τ.
+    Vessels with proximity X in given time range
     """
-    collection = db.dynamic_nov
-    time_start = datetime.strptime("2017-11-06T08:00:00.000+00:00", "%Y-%m-%dT%H:%M:%S.%f%z")
-    time_end = datetime.strptime("2017-11-06T08:59:59.000+00:00", "%Y-%m-%dT%H:%M:%S.%f%z")
+    print("Executing query 4...")
+    collection = db.dynamic_collection
+    time_start = datetime.strptime(start_time, "%Y-%m-%dT%H:%M:%S.%f%z")
+    time_end = datetime.strptime(end_time, "%Y-%m-%dT%H:%M:%S.%f%z")
 
+    # Start timer
     start = time.time()
+
     # Query vessels that have positions within the given time range
-    vessels_in_time_range = collection.find({
-        "positions.timestamp": {
-            "$gte": time_start,
-            "$lte": time_end
-        }
-    })
+    vessels_in_time_range = collection.find(
+        {"positions.timestamp": {"$gte": time_start, "$lte": time_end}},
+        {"vessel_id": 1, "positions.timestamp": 1, "positions.geometry": 1}
+    ).batch_size(100)
+
+    # Keep the documents on vessels list
     vessels = list(vessels_in_time_range)
-    print(f"Found {len(vessels)} in timerange [{time_start}, {time_end}].")
-    documents = []
+    print(f"Found {len(vessels)} vessels in timerange [{time_start}, {time_end}].")
+
+    # Group positions by timestamp
+    timestamp_positions = defaultdict(list)
     for vessel in vessels:
-        vessel_id = vessel['vessel_id']  # Current vessel ID
-        
+        vessel_id = vessel['vessel_id']
         for pos in vessel['positions']:
-            pos_timestamp = pos['timestamp']
-            coord1 = pos['geometry']['coordinates']
-
-
-            # Query for other vessels with the same timestamp, excluding the current vessel
-            nearby_vessels = collection.find({
-                "vessel_id": {"$ne": vessel_id},  # Exclude self
-                "positions": {
-                    "$elemMatch": {
-                        "timestamp": pos_timestamp,  # Match exact timestamp
-                        "geometry.coordinates": {
-                            "$geoWithin": {
-                                "$centerSphere": [coord1, 4/ 6378.1]  # Convert radius to radians
-                            }
-                        }
-                    }
-                }
+            timestamp_positions[pos['timestamp']].append({
+                'vessel_id': vessel_id,
+                'coordinates': pos['geometry']['coordinates']
             })
 
-            for near_vessel in nearby_vessels:
-                for near_pos in near_vessel['positions']:
-                    if near_vessel['vessel_id'] != vessel_id and near_pos['timestamp'] == pos_timestamp:
-                        coord2 = near_pos['geometry']['coordinates']
+    # Process the positions at each timestamp
+    documents = []
+    for timestamp, positions in timestamp_positions.items():
+        for i, vessel_1 in enumerate(positions):
+            coord1 = vessel_1['coordinates']
+            vessel_1_id = vessel_1['vessel_id']
 
-                        # Skip if the coordinates are identical (same position)
-                        if coord1 == coord2:
-                            continue  
+            for vessel_2 in positions[i+1:]:
+                coord2 = vessel_2['coordinates']
+                vessel_2_id = vessel_2['vessel_id']
 
-                        distance = geodesic(coord1[::-1], coord2[::-1]).meters  # Lat/Lon swap required
-                        locations = {"timestamp": pos_timestamp,
-                                    "vessel_1": {"vessel_id": vessel_id,
-                                                  "coordinates": coord1},
-                                    "vessel_2": {"vessel_id": near_vessel['vessel_id'],
-                                                  "coordinates": coord2},
-                                    "distance(m)": distance}
-                        documents.append(locations)
+                # Skip if the coordinates are identical (same position)
+                if coord1 == coord2:
+                    continue
 
-    print(f"Executed in {start - time.time():.4f} seconds")
-    return documents      
+                # Calculate distance using geodesic 
+                distance = geodesic(coord1[::-1], coord2[::-1]).meters  # Lat/Lon swap required
+                if distance < X:
+                    # Store the distance and vessel info
+                    location_info = {
+                        "timestamp": timestamp,
+                        "vessel_1": {"vessel_id": vessel_1_id, "coordinates": coord1},
+                        "vessel_2": {"vessel_id": vessel_2_id, "coordinates": coord2},
+                        "distance(m)": round(distance,6)
+                    }
+                    documents.append(location_info)
+    # End timer
+    end = time.time()
+
+    # Output first five documents
+    if documents:
+        count = 0
+        for doc in documents:
+            print(json_util.dumps(doc, indent=2))
+            count += 1
+            if count==5:
+                break
+    else:
+        print("No documents found!")
+    
+    print(f"Execution time: {end - start:.4f} seconds")
 
 def main():
     db, client = mongo_connect()
-    
     ensure_geospatial_index(db)
 
     # queries
