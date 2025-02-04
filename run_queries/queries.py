@@ -74,8 +74,8 @@ def query2_vessels_by_country(db):
     εύρεση των πλοίων με σημαία Ελλάδας και όνομα που περιέχει κάποιο αλφαριθμητικό
     """
     print("Input the variables for query 'Find vessels from a specific country that contain a given alphanumeric in their ship type description'")
-    country = input("Give the country name to check for: ")
-    alphanumeric = input("Give alphanumeric you want to check for in description: ")
+    country = input("Give the country name to check for: ex. Malta")
+    alphanumeric = input("Give alphanumeric you want to check for in description: ex. all")
     collection = db.vessels_collection
     # Aggregate pipeline definition
     pipeline = [{"$match": {"country": country}}, # Match the country flag
@@ -102,9 +102,9 @@ def query3a_find_vessels_in_radius(db):
     collection = db.dynamic_collection
     
     print("Input the variables for query 'Find vessels within the circle of given point and radius")
-    lon = float(input("Insert longitude of center point: "))
-    lat = float(input("Insert latitude of center point: "))
-    radius = float(input("Insert radius of circle (km): "))
+    lon = float(input("Insert longitude of center point: ex. 23.3699798"))
+    lat = float(input("Insert latitude of center point: ex. 37.6972956"))
+    radius = float(input("Insert radius of circle (km): ex. 1"))
     # Pipeline definition
     pipeline = [{"$match": {"positions.geometry": 
                                 {"$geoWithin": 
