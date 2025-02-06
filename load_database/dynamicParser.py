@@ -118,7 +118,7 @@ def main():
     start_time = time.time()  # Start the timer
 
     # Load configuration
-    config = load_config("dynamic_config.yaml")
+    config = load_config("load_database/dynamic_config.yaml")
     collection = connect_to_mongo(config["mongo_uri"], config["database"], config["collection"])
     
     # Iterate over all files in the configuration

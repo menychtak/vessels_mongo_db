@@ -80,7 +80,7 @@ def process_vessel_data(vessel_data_path: str, type_codes_path: str, collection)
 # Main execution function
 def main():
     # Load config from YAML file
-    config = load_config("vessel_config.yaml")
+    config = load_config("load_database/vessel_config.yaml")
 
     # Connect to MongoDB
     client = MongoClient(config["mongo_uri"])

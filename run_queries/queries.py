@@ -18,7 +18,7 @@ def mongo_connect():
     db = client.mongo_db_project
     return db, client
 
-def documents_output(cursor):
+def documents_output(cursor, fetch=5):
     """
     Print the results of cursor object (fetch size=5)
     """
@@ -27,7 +27,7 @@ def documents_output(cursor):
         for doc in cursor:
             print(json_util.dumps(doc, indent=4))
             count += 1
-            if count == 5:
+            if count == fetch:
                 break
     else:
         print("No documents found!")

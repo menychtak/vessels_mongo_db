@@ -2,5 +2,5 @@ mongo_uri: "mongodb://localhost:27017/"
 database: "mongo_db_project"
 collection: "vessels_collection"
 
-vessel_data_path: "ais_static/unipi_ais_static.csv"
-type_codes_path: "ais_static/ais_codes_descriptions.csv"
+vessel_data_path: "load_database/ais_static/unipi_ais_static.csv"
+type_codes_path: "load_database/ais_static/ais_codes_descriptions.csv"

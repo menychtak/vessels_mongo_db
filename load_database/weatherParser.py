@@ -68,6 +68,7 @@ def parse_insert(file_paths, collection):
     # Merge month files into one geodataframe
     combined_gdf = gpd.GeoDataFrame()
     for file in file_paths:
+        print(f"Processing {file}")
         # Parse the file
         gdf = gpd.read_file(file, encoding='ISO-8859-1')  # Encoding of .cpg file
 
@@ -110,7 +111,7 @@ def main():
     start = time.time()
     
     # Load config from YAML file
-    config = load_config("weather_config.yaml")
+    config = load_config("load_database/weather_config.yaml")
 
     # Define the file paths
     file_paths = define_file_paths(config)
