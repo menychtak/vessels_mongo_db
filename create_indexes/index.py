@@ -92,6 +92,8 @@ def create_compound_index(db, collection_name, columns, orders):
 def main():
     collection_vessels = "vessels_collection"
     collection_dynamic = "dynamic_collection"
+    collection_geodata = "geodata_collection" 
+    collection_weather = "weather_collection" 
 
     db, client = mongo_connect()
     print("Checking existing indexes...")
@@ -100,6 +102,10 @@ def main():
     delete_all_indexes_except_id(db, collection_vessels)
     list_indexes(db, collection_dynamic)
     delete_all_indexes_except_id(db, collection_dynamic)
+    list_indexes(db, collection_geodata)
+    delete_all_indexes_except_id(db, collection_geodata)
+    list_indexes(db, collection_weather)
+    delete_all_indexes_except_id(db, collection_weather)
 
     # create indexes
     create_compound_index(
@@ -110,11 +116,19 @@ def main():
     )
 
     create_geo_index(db, collection_dynamic, "positions.geometry")
+    create_indexes(db, collection_geodata , "loc_type")
+    create_indexes(db, collection_weather , "timestamp_start")
+    create_indexes(db, collection_weather , "timestamp_end")
+
     print("Final list of Indexes on ", collection_vessels)
     list_indexes(db, collection_vessels)
     print("Final list of Indexes on ", collection_dynamic)
     list_indexes(db, collection_dynamic)
-    
+    print("Final list of Indexes on ", collection_geodata)
+    list_indexes(db, collection_geodata)
+    print("Final list of Indexes on ", collection_weather)
+    list_indexes(db, collection_weather)
+
     client.close()
 
 
