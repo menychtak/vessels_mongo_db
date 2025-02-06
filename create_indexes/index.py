@@ -90,29 +90,31 @@ def create_compound_index(db, collection_name, columns, orders):
     print(f"Compound index created for columns: {columns} with orders: {orders}")
 
 def main():
-    # collection = "vessels_collection"
-    collection = "dynamic_collection"
+    collection_vessels = "vessels_collection"
+    collection_dynamic = "dynamic_collection"
 
     db, client = mongo_connect()
     print("Checking existing indexes...")
 
-    list_indexes(db, collection)
-    delete_all_indexes_except_id(db, collection)
+    list_indexes(db, collection_vessels)
+    delete_all_indexes_except_id(db, collection_vessels)
+    list_indexes(db, collection_dynamic)
+    delete_all_indexes_except_id(db, collection_dynamic)
 
-    # Example use pf index creation modules 
+    # create indexes
+    create_compound_index(
+        db,
+        collection_vessels,
+        ["country", "ascending"],
+        ["ascending", "ascending"]
+    )
 
-    # create_indexes(db, collection, ["country"], order="descending")
-    # create_indexes(db, collection, ["description", "country"], order="ascending")
-
-    # create_compound_index(
-    #     db,
-    #     collection,
-    #     ["country", "description"],
-    #     ["ascending", "ascending"]
-    # )
-
-    # create_geo_index(db, "dynamic_collection")
-
+    create_geo_index(db, collection_dynamic, "positions.geometry")
+    print("Final list of Indexes on ", collection_vessels)
+    list_indexes(db, collection_vessels)
+    print("Final list of Indexes on ", collection_dynamic)
+    list_indexes(db, collection_dynamic)
+    
     client.close()
 
 
