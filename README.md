@@ -14,4 +14,4 @@ This project focuses on designing and implementing a NoSQL database using MongoD
 pip install -r requirements.txt
 ```
 
-3) Additionally, follow the commands in the README files inside the load_database/noaa_weather and load_database/dynamic folders to set up the necessary data. 
+4) Additionally, follow the commands in the README files inside the load_database/noaa_weather and load_database/dynamic folders to set up the necessary data. 
