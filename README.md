@@ -4,10 +4,14 @@ This project was developed as part of an assignment for the University of Piraeu
 This project focuses on designing and implementing a NoSQL database using MongoDB to manage a large dataset related to vessel movements and maritime data, including ship positions, trajectories, vessel types, geographic locations, and meteorological conditions. The goal is to create an optimized data model that ensures efficient storage and indexing to support spatial and spatio-temporal queries, facilitating advanced maritime analysis while maintaining high performance.
 
 ## Prerequisites / Steps
-1) Before proceeding, ensure that all necessary dependencies are installed. Run the following command to install the required modules:
+1) Download MongoDB Community Server from https://www.mongodb.com/try/download/community (version: 8.0.4, platform: Windows x64, package: msi). Install server and ensure that MongoDB Compass checkbox is ckecked too.
+
+2) After MongoDB installation, open MongoDB Compass and connect to URI mongodb://localhost:27017/ (default URI). Make sure you can use MongoSH.
+   
+3) Before proceeding, ensure that all necessary dependencies are installed. Run the following command to install the required modules:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-2) Additionally, follow the commands in the README files inside the load_database/noaa_weather and load_database/dynamic folders to set up the necessary data. 
+4) Additionally, follow the commands in the README files inside the load_database/noaa_weather and load_database/dynamic folders to set up the necessary data. 
