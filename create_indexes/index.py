@@ -111,14 +111,13 @@ def main():
     create_compound_index(
         db,
         collection_vessels,
-        ["country", "ascending"],
+        ["country", "description"],
         ["ascending", "ascending"]
     )
 
     create_geo_index(db, collection_dynamic, "positions.geometry")
-    create_indexes(db, collection_geodata , "loc_type")
-    create_indexes(db, collection_weather , "timestamp_start")
-    create_indexes(db, collection_weather , "timestamp_end")
+    create_indexes(db, collection_geodata , ["loc_type"])
+    create_indexes(db, collection_weather , ["timestamp_start", "timestamp_end"])
 
     print("Final list of Indexes on ", collection_vessels)
     list_indexes(db, collection_vessels)
