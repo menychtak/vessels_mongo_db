@@ -14,4 +14,26 @@ This project focuses on designing and implementing a NoSQL database using MongoD
 pip install -r requirements.txt
 ```
 
+**If you prefer working with docker :**
+## Prerequisites
+
+- Docker must be installed on your machine.  
+  If you don't have Docker, [download and install it here](https://www.docker.com/get-started).
+
+## To Set Up MongoDB
+
+### 1. **Run MongoDB Container with Docker**
+
+Open a terminal and run the following command to create and start a MongoDB container. This will expose MongoDB's port 27017 on your localhost.
+
+```bash
+$ docker run --name mongodb -p 27017:27017 -d mongo:8.0.4
+```
+
+Once the container is running, connect to MongoDB by entering the following command:
+
+```bash
+$ docker exec -it mongodb mongosh
+```
+
 4) Additionally, follow the commands in the README files inside the load_database/noaa_weather and load_database/dynamic folders to set up the necessary data. 
