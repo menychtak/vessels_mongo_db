@@ -515,8 +515,7 @@ def main():
         print(vessel_info)
 
     print("\n\n\nRunnin query vessel_proximity_in_time_range")
-    documents = query4_vessel_proximity_in_time_range(db)
-    print(documents)
+    query4_vessel_proximity_in_time_range(db)
     client.close()
 
 if __name__ == "__main__":
